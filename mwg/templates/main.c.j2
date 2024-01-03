@@ -1,0 +1,31 @@
+{% for include in INCLUDES -%}
+#include {{ include }}
+{% endfor %}
+
+{{ HEADER }}
+
+void msleep(long msec)
+{
+    struct timespec sleep_duration;
+    sleep_duration.tv_sec = 0;
+    sleep_duration.tv_nsec = msec * 1000 * 1000;
+    nanosleep(&sleep_duration, NULL);
+}
+
+int main(int argc, char* argv[]) {
+{%- filter indent(width=4) %}
+// Initialization
+{{ BODY_initialization }}
+{% endfilter %}
+
+{%- filter indent(width=4) %}
+// Actual code
+{{ BODY_kernel }}
+{% endfilter %}
+
+{%- filter indent(width=4) %}
+// Finalization
+{{ BODY_finalization }}
+{% endfilter %}
+    return 0;
+}
